@@ -18,4 +18,13 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    /**
+     * A auth test for the creation of a new Post
+     */
+    public function testAuthTest()
+    {
+        $response = $this->post('posts', array());
+        $response->assertStatus(401);
+    }
 }
