@@ -1,7 +1,11 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: max
- * Date: 27.07.18
- * Time: 21:15
- */
+@extends('master')
+
+@section('content')
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <post-form></post-form>
+            </div>
+        </div>
+    </div>
+@endsection
