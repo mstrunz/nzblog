@@ -161,6 +161,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         App\Mongo\ServiceProvider::class,
+        Jenssegers\Mongodb\MongodbServiceProvider::class,
 
     ],
 
