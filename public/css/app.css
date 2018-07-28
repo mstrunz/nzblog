@@ -6797,3 +6797,6 @@ button.close {
     display: none !important;
   }
 }
+.comment {
+  margin-bottom: 10px;
+}

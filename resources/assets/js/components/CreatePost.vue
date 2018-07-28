@@ -28,7 +28,7 @@
                                               id="body"
                                               v-model="post.body"
                                               placeholder="Please enter your message here..."
-                                              rows="5"></textarea>
+                                              rows="1"></textarea>
                             <span v-if="errors.body" class="help-block text-danger">{{ errors.body[0] }}</span>
                         </div>
                     </div>

@@ -11,8 +11,15 @@
                 <p>{{post.body}}</p>
             </div>
             <div class="panel-footer">
-                <span class="glyphicon glyphicon-flag" id="comment"></span>
-                <a href="#" id="comments" @click="report(post)">Comment</a>
+                <div v-for="comment in post.comments" class="form-control comment">
+                    <p><span class="glyphicon glyphicon-comment"></span> {{comment.body}}</p>
+                </div>
+                <textarea class="form-control"
+                          id="body"
+                          v-model="comments[post._id]"
+                          rows="2"
+                          placeholder="Comment this Post"></textarea>
+                <a href="#" id="comments" @click="comment(post._id)">Save Comment</a>
             </div>
         </div>
         <paginate
@@ -32,7 +39,9 @@
             return {
                 posts: [],
                 pageCount: 1,
-                endpoint: 'api/posts?page='
+                endpoint: 'api/posts?page=',
+                currentPage: 1,
+                comments: []
             };
         },
 
@@ -46,12 +55,16 @@
                     .then(({data}) => {
                         this.posts = data.data;
                         this.pageCount = data.meta.last_page;
+                        this.currentPage = data.meta.current_page
                     });
             },
 
-            report(id) {
-                    axios.put('api/signatures/'+id+'/report')
-                        .then(response => this.removeSignature(id));
+            comment(id) {
+                axios.put('api/posts/' + id + '/comment', {'comment': this.comments[id]})
+                    .then(response => {
+                        this.comments[id] = '';
+                        this.fetch(this.currentPage);
+                    });
             },
 
         }

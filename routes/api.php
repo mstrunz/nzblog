@@ -20,4 +20,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::resource('posts', 'Api\PostController')
     ->only(['index', 'store', 'show']);
 
-Route::put('posts/{post}/comment', 'Api\CommentController@update');
+Route::put('posts/{post}/comment', 'Api\CommentController@store');

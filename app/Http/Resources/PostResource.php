@@ -24,6 +24,8 @@ class PostResource extends JsonResource
                 'title' => $this->title,
                 'date' => $this->date,
                 'user' => $userName,
+                '_id'  => $this->_id,
+                'comments' => $this->comments
             ];
     }
 }

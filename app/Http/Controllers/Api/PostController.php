@@ -61,7 +61,6 @@ class PostController extends Controller
             'body' => 'required|min:3',
             'title' => 'required|min:3'
         ]);
-        //$postRequest->user = Auth::id();
 
         $post = Post::create($postRequest);
         // TODO: There is possible a better way to add the user to the request and than save it all together

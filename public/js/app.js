@@ -45844,6 +45844,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'posts',
@@ -45851,7 +45858,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             posts: [],
             pageCount: 1,
-            endpoint: 'api/posts?page='
+            endpoint: 'api/posts?page=',
+            currentPage: 1,
+            comments: []
         };
     },
     created: function created() {
@@ -45870,13 +45879,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 _this.posts = data.data;
                 _this.pageCount = data.meta.last_page;
+                _this.currentPage = data.meta.current_page;
             });
         },
-        report: function report(id) {
+        comment: function comment(id) {
             var _this2 = this;
 
-            axios.put('api/signatures/' + id + '/report').then(function (response) {
-                return _this2.removeSignature(id);
+            axios.put('api/posts/' + id + '/comment', { 'comment': this.comments[id] }).then(function (response) {
+                _this2.comments[id] = '';
+                _this2.fetch(_this2.currentPage);
             });
         }
     }
@@ -45916,25 +45927,60 @@ var render = function() {
             _c("p", [_vm._v(_vm._s(post.body))])
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "panel-footer" }, [
-            _c("span", {
-              staticClass: "glyphicon glyphicon-flag",
-              attrs: { id: "comment" }
-            }),
-            _vm._v(" "),
-            _c(
-              "a",
-              {
-                attrs: { href: "#", id: "comments" },
+          _c(
+            "div",
+            { staticClass: "panel-footer" },
+            [
+              _vm._l(post.comments, function(comment) {
+                return _c("div", { staticClass: "form-control comment" }, [
+                  _c("p", [
+                    _c("span", { staticClass: "glyphicon glyphicon-comment" }),
+                    _vm._v(" " + _vm._s(comment.body))
+                  ])
+                ])
+              }),
+              _vm._v(" "),
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.comments[post._id],
+                    expression: "comments[post._id]"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  id: "body",
+                  rows: "2",
+                  placeholder: "Comment this Post"
+                },
+                domProps: { value: _vm.comments[post._id] },
                 on: {
-                  click: function($event) {
-                    _vm.report(post)
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.comments, post._id, $event.target.value)
                   }
                 }
-              },
-              [_vm._v("Comment")]
-            )
-          ])
+              }),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  attrs: { href: "#", id: "comments" },
+                  on: {
+                    click: function($event) {
+                      _vm.comment(post._id)
+                    }
+                  }
+                },
+                [_vm._v("Save Comment")]
+              )
+            ],
+            2
+          )
         ])
       }),
       _vm._v(" "),
@@ -46221,7 +46267,7 @@ var render = function() {
                     attrs: {
                       id: "body",
                       placeholder: "Please enter your message here...",
-                      rows: "5"
+                      rows: "1"
                     },
                     domProps: { value: _vm.post.body },
                     on: {
